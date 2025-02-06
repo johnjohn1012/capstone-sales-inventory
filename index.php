@@ -1,167 +1,136 @@
-<?php
-include 'includes/header.php';
+<?php include('includes/connection.php'); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <style>
+        /* Custom CSS for Glowing Effects */
+        body {
+            background: url("https://th.bing.com/th/id/R.e9ea962e02082e7e2c7f3815a71a8364?rik=j34ZRvwSEhWP6A&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f07%2fFree-4k-Backgrounds-Screen-Download.jpg&ehk=z%2f7Q4nlcVzNOT4%2f8vtJUjBFs3p%2fzurkacBEpNuTsIqM%3d&risl=&pid=ImgRaw&r=0") no-repeat center center fixed;
+        background-size: cover;
+
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden; /* To prevent scrollbars due to animation */
+            height: 100vh; /* Ensures the background covers the full viewport height */
+            animation: glowingBackground 5s infinite alternate;
+        }
+
+    
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control {
+            border-radius: 30px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
+            transform: scale(1.02);
+        }
+
+        .btn {
+            border-radius: 30px;
+            transition: box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
+            background-color: #0056b3;
+        }
+
+        h5 {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #main-header h1 {
+            text-align: center; /* Center the text */
+            margin: 0 auto;     /* Center the container */
+        }
+    </style>
+</head>
+<body>
+
+<?php 
+if (isset($_POST['submit'])) {
+    $user = $_POST['email'];
+    $password = md5($_POST['password']); // Encrypt password
+
+    $sql = "SELECT * FROM users WHERE email = '$user' AND password = '$password'";
+    $run = mysqli_query($con, $sql);
+    $check = mysqli_num_rows($run);
+
+    if ($check == 1) {
+        session_start();
+        $_SESSION['email'] = $user;
+        echo "<script>window.open('index_admin.php?page=dashboard', '_self');</script>";
+    } else {
+        echo "<script>alert('Invalid Email or Password'); window.open('index.php', '_self');</script>";
+    }
+}
 ?>
 
-<body>
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    
-    <!-- Sidebar Start -->
-    <aside class="left-sidebar">
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-center">
-          <a href="index_admin.php?page=dashboard" class="text-nowrap logo-img">
-            <img src="images/logo.png" width="120" height="100" style="display: block; margin: 0 auto;" alt="Logo" />
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-            <i class="ti ti-x fs-8"></i>
-          </div>
+
+    <!-- Header -->
+    <header id="main-header" class="bg-danger py-2 text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center"> <!-- Center content -->
+                    <h1><i class="fa fa-user"></i> User Login</h1>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar>
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
-            </li>
+    <!-- Login Section -->
+    <section id="post" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card p-4">
+                        <div class="card-header bg-light">
+                            <h5>Login Panel</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Enter your password" required />
+                                </div>
+                                <button type="submit" name="submit" class="btn btn-success w-100">Log In</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <li class="sidebar-item">
-            <a class="sidebar-link" href="index.php?page=dashboard">
-             
-                <i class="ti ti-layout-dashboard"></i>
-                <span class="hide-menu">Dashboard</span>
-              </a>
-            </li>
+    <!-- Footer -->
+  
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=pos">
-                <i class="ti ti-article"></i>
-                <span class="hide-menu">POS</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=order_list">
-                <i class="ti ti-alert-circle"></i>
-                <span class="hide-menu">Order List</span>
-              </a>
-            </li>
-
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Master List</span>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=category_list">
-                <i class="ti ti-cards"></i>
-                <span class="hide-menu">Category List</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=inventory_list">
-                <i class="ti ti-cards"></i>
-                <span class="hide-menu">Inventory List</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=product_list">
-                <i class="ti ti-file-description"></i>
-                <span class="hide-menu">Product List</span>
-              </a>
-            </li>
-
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Reports</span>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=sales_report">
-                <i class="ti ti-login"></i>
-                <span class="hide-menu">Sales Report</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=analytics_report">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">Analytics Report</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=historic_reports">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">Historic Reports</span>
-              </a>
-            </li>
-
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Maintenance</span>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=user_list">
-                <i class="ti ti-login"></i>
-                <span class="hide-menu">User List</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=system_information">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">System Information</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- End Sidebar navigation -->
-      </div>
-    </aside>
-    <!-- Sidebar End -->
-
-    <div class="body-wrapper">
-      <?php include 'includes/nav.php'; ?>
-      <div class="container-fluid">
-        <!-- Content Area -->
-        <?php
-          $allowed_pages = [
-            'dashboard' => 'modules/dashboard.php',
-            'pos' => 'modules/pos.php',
-            'order_list' => 'modules/order_list.php',
-            'category_list' => 'modules/category_list.php',
-            'inventory_list' => 'modules/inventory_list.php',
-            'product_list' => 'modules/product_list.php',
-            'sales_report' => 'modules/sales_report.php',
-            'analytics_report' => 'modules/analytics_report.php',
-            'historic_reports' => 'modules/historic_reports.php',
-            'user_list' => 'modules/user_list.php',
-            'system_information' => 'modules/system_information.php',
-          ];
-
-          $page = $_GET['page'] ?? 'dashboard';
-          if (array_key_exists($page, $allowed_pages)) {
-            include $allowed_pages[$page];
-          } else {
-            echo "<h4>Page Not Found</h4>";
-          }
-        ?>
-      </div>
-    </div>
-  </div>
-
-  <script src="assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/sidebarmenu.js"></script>
-  <script src="assets/js/app.min.js"></script>
-  <script src="assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="assets/js/dashboard.js"></script>
-
-  <?php include 'includes/footer.php'; ?>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
+</html>
