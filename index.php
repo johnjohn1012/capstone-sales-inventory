@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>User Login</title>
+    <link rel="shortcut icon" type="image/png" href="images/logo.png" />
+    <title>Admin Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
     <style>
         /* Custom CSS for Glowing Effects */
@@ -92,7 +93,7 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center"> <!-- Center content -->
-                    <h1><i class="fa fa-user"></i> User Login</h1>
+                    <h1><i class="fa fa-user"></i> Admin Login</h1>
                 </div>
             </div>
         </div>
