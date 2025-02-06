@@ -49,108 +49,116 @@ include 'includes/header.php';
         </div>
 
         <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar>
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
-            </li>
 
-            <li class="sidebar-item">
-            <a class="sidebar-link" href="index_admin.php?page=dashboard">
-             
-                <i class="ti ti-layout-dashboard"></i>
-                <span class="hide-menu">Dashboard</span>
-              </a>
-            </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=pos">
-                <i class="ti ti-article"></i>
-                <span class="hide-menu">POS</span>
-              </a>
-            </li>
+<nav class="sidebar-nav scroll-sidebar" data-simplebar>
+  <ul id="sidebarnav">
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Home</span>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=order_list">
-                <i class="ti ti-alert-circle"></i>
-                <span class="hide-menu">Order List</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=dashboard">
+        <i class="ti ti-layout-dashboard"></i>
+        <span class="hide-menu">Dashboard</span>
+      </a>
+    </li>
 
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Master List</span>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=pos">
+        <i class="ti ti-cash"></i>
+        <span class="hide-menu">POS</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=category_list">
-                <i class="ti ti-cards"></i>
-                <span class="hide-menu">Category List</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=order_list">
+        <i class="ti ti-list-check"></i>
+        <span class="hide-menu">Order List</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=inventory_list">
-                <i class="ti ti-cards"></i>
-                <span class="hide-menu">Inventory List</span>
-              </a>
-            </li>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Master List</span>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=product_list">
-                <i class="ti ti-file-description"></i>
-                <span class="hide-menu">Product List</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=category_list">
+        <i class="ti ti-tags"></i>
+        <span class="hide-menu">Category List</span>
+      </a>
+    </li>
 
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Reports</span>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=inventory_list">
+        <i class="ti ti-package"></i>
+        <span class="hide-menu">Inventory List</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=sales_report">
-                <i class="ti ti-login"></i>
-                <span class="hide-menu">Sales Report</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=product_list">
+        <i class="ti ti-box"></i>
+        <span class="hide-menu">Product List</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=analytics_report">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">Analytics Report</span>
-              </a>
-            </li>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Reports</span>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=historic_reports">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">Historic Reports</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=sales_report">
+        <i class="ti ti-chart-bar"></i>
+        <span class="hide-menu">Sales Report</span>
+      </a>
+    </li>
 
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Maintenance</span>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=analytics_report">
+        <i class="ti ti-chart-pie"></i>
+        <span class="hide-menu">Analytics Report</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=user_list">
-                <i class="ti ti-login"></i>
-                <span class="hide-menu">User List</span>
-              </a>
-            </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=historic_reports">
+        <i class="ti ti-history"></i>
+        <span class="hide-menu">Historic Reports</span>
+      </a>
+    </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="index_admin.php?page=system_information">
-                <i class="ti ti-user-plus"></i>
-                <span class="hide-menu">System Information</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Maintenance</span>
+    </li>
+
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=user_list">
+        <i class="ti ti-users"></i>
+        <span class="hide-menu">User List</span>
+      </a>
+    </li>
+
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="index_admin.php?page=system_information">
+        <i class="ti ti-info-circle"></i>
+        <span class="hide-menu">System Information</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+<!-- End Sidebar navigation -->
+
+
+
         <!-- End Sidebar navigation -->
+
+
+        
       </div>
     </aside>
     <!-- Sidebar End -->
