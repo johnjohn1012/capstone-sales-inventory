@@ -200,12 +200,17 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h1><i class="fa fa-user"></i> Admin Login</h1>
+                    <h1><i class="fa fa-user"></i> Harah Rubina Del Dios</h1>
                 </div>
             </div>
         </div>
     </header>
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">
