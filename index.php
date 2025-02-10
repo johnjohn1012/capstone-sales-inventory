@@ -1,127 +1,6 @@
-<?php include('includes/connection.php'); ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="shortcut icon" type="image/png" href="images/logo.png" />
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <!-- Add SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Add SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        /* Custom CSS for Glowing Effects */
-        body {
-            background: url("https://th.bing.com/th/id/R.e9ea962e02082e7e2c7f3815a71a8364?rik=j34ZRvwSEhWP6A&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f07%2fFree-4k-Backgrounds-Screen-Download.jpg&ehk=z%2f7Q4nlcVzNOT4%2f8vtJUjBFs3p%2fzurkacBEpNuTsIqM%3d&risl=&pid=ImgRaw&r=0") no-repeat center center fixed;
-        background-size: cover;
-
-            font-family: Arial, sans-serif;
-            color: white;
-            overflow: hidden; /* To prevent scrollbars due to animation */
-            height: 100vh; /* Ensures the background covers the full viewport height */
-            animation: glowingBackground 5s infinite alternate;
-        }
-
-    
-
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .form-control {
-            border-radius: 30px;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s, transform 0.3s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
-            transform: scale(1.02);
-        }
-
-        .btn {
-            border-radius: 30px;
-            transition: box-shadow 0.3s, background-color 0.3s;
-        }
-
-        .btn:hover {
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
-            background-color: #0056b3;
-        }
-
-        h5 {
-            text-align: center;
-            font-weight: bold;
-            color: #333;
-        }
-
-        #main-header h1 {
-            text-align: center; /* Center the text */
-            margin: 0 auto;     /* Center the container */
-        }
-
-        /* Add these new styles */
-        .logo-circle {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-
-        .logo-circle img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-        
-        .captcha-container {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .captcha-code {
-            background-color: #f0f0f0;
-            padding: 10px 20px;
-            font-size: 24px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 5px;
-            border-radius: 5px;
-            color: #333;
-            user-select: none;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        
-        .refresh-captcha {
-            color: #0d6efd;
-            cursor: pointer;
-            margin-left: 10px;
-            text-decoration: none;
-        }
-        
-        .refresh-captcha:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-
 <?php 
 session_start();
+include('includes/connection.php');
 
 // Generate captcha code
 function generateCaptcha($length = 6) {
@@ -193,7 +72,139 @@ if (isset($_POST['submit'])) {
     $_SESSION['captcha'] = generateCaptcha();
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" type="image/png" href="images/logo.png" />
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <!-- Add SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Add SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Custom CSS for Glowing Effects */
+        body {
+            background: url("https://th.bing.com/th/id/R.e9ea962e02082e7e2c7f3815a71a8364?rik=j34ZRvwSEhWP6A&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f07%2fFree-4k-Backgrounds-Screen-Download.jpg&ehk=z%2f7Q4nlcVzNOT4%2f8vtJUjBFs3p%2fzurkacBEpNuTsIqM%3d&risl=&pid=ImgRaw&r=0") no-repeat center center fixed;
+        background-size: cover;
 
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden; /* To prevent scrollbars due to animation */
+            height: 100vh; /* Ensures the background covers the full viewport height */
+            animation: glowingBackground 5s infinite alternate;
+        }
+
+    
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.6) !important; /* Dark transparent background */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title, .card-text {
+            color: white !important;
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .btn {
+            border-radius: 30px;
+            transition: box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
+            background-color: #0056b3;
+        }
+
+        h5 {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #main-header h1 {
+            text-align: center; /* Center the text */
+            margin: 0 auto;     /* Center the container */
+        }
+
+        /* Add these new styles */
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-circle img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .captcha-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .captcha-code {
+            background-color: rgba(240, 240, 240, 0.9);
+            padding: 10px 20px;
+            font-size: 24px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            border-radius: 5px;
+            color: #333;
+            user-select: none;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .refresh-captcha {
+            color: #0d6efd;
+            cursor: pointer;
+            margin-left: 10px;
+            text-decoration: none;
+        }
+        
+        .refresh-captcha:hover {
+            text-decoration: underline;
+        }
+
+        .form-floating > label {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
 
     <!-- Header -->
     <header id="main-header" class="bg-danger py-2 text-white">
