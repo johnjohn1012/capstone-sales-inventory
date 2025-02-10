@@ -147,13 +147,60 @@ include 'includes/header.php';
       </a>
     </li>
 
+    <br>
+
+
     <li class="sidebar-item">
-      <a class="sidebar-link" href="index_admin.php?page=system_information">
-        <i class="ti ti-info-circle"></i>
-        <span class="hide-menu">System Information</span>
-      </a>
+    <a class="sidebar-link" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; 
+        color: black; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; 
+        text-shadow: 1px 1px 3px white, 0 0 5px white;">
+        
+        <span id="clock"></span>
+        <span id="date"></span>
+      
+    </a>
     </li>
+
+      <script>
+          function updateDateTime() {
+              let now = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
+              let time = new Date(now);
+
+              // Format time
+              let hours = time.getHours();
+              let minutes = time.getMinutes();
+              let seconds = time.getSeconds();
+              let ampm = hours >= 12 ? "PM" : "AM";
+
+              hours = hours % 12 || 12; // Convert to 12-hour format
+              minutes = minutes.toString().padStart(2, "0");
+              seconds = seconds.toString().padStart(2, "0");
+
+              let formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+              // Format date
+              let options = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
+              let formattedDate = time.toLocaleDateString("en-US", options);
+
+              // Update HTML
+              document.getElementById("clock").innerText = formattedTime;
+              document.getElementById("date").innerText = formattedDate;
+          }
+
+          setInterval(updateDateTime, 1000);
+          updateDateTime(); // Initial call to prevent delay
+      </script>
+
+
+
+
+
   </ul>
+
+
+
+
+
 </nav>
 <!-- End Sidebar navigation -->
 

@@ -1,6 +1,7 @@
       <!--  Header Start -->
-      <header class="app-header" style="background: linear-gradient(135deg, rgb(219, 231, 244), rgb(174, 156, 203)); color: white; height: 100px;">
-
+     
+      <header class="app-header" style="background: linear-gradient(135deg, rgba(230, 151, 34, 0.74), rgb(174, 156, 203)); color: white; height: 100px;">
+    
 
         <nav class="navbar navbar-expand-lg navbar-light">
           <ul class="navbar-nav">
@@ -13,10 +14,19 @@
           
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <img src="images/logos.png" alt="" width="60" height="60" class="rounded-circle">
-                </a>
+                <div style="display: flex; align-items: center;">
+                <span style="margin-right: 1000px; font-family: 'Times New Roman', Times, serif; color: white; font-size: 37px; font-weight: bold;">
+                  Harah Rubina Del Dios
+              </span>
+
+                </span>
+
+                  <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <img src="images/logos.png" alt="" width="60" height="60" class="rounded-circle">
+                  </a>
+                </div>
+
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
 

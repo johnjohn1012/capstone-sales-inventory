@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<br><br>
+<br>
 
 
         <h1>Category List</h1>
