@@ -123,98 +123,14 @@
 <?php 
 session_start();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 7d2f3fc78c0cbc6ed404b08213569da782620186
 // Generate captcha code
 function generateCaptcha($length = 6) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $captcha = '';
     for ($i = 0; $i < $length; $i++) {
         $captcha .= $characters[rand(0, strlen($characters) - 1)];
-<<<<<<< HEAD
-=======
-    $sql = "SELECT * FROM users WHERE email = '$user' AND password = '$password'";
-    $run = mysqli_query($con, $sql);
-    $check = mysqli_num_rows($run);
-
-    if ($check == 1) {
-        session_start();
-        $_SESSION['email'] = $user;
-        echo "<script>window.open('index_admin.php?page=dashboard', '_self');</script>";
-
-        
-
-    } else {
-        echo "<script>alert('Invalid Email or Password'); window.open('index.php', '_self');</script>";
->>>>>>> c51e4fd03bd979e2ba3b0907f4dcc76478822920
     }
     return $captcha;
-}
-
-// If captcha is not set, generate it
-if (!isset($_SESSION['captcha'])) {
-    $_SESSION['captcha'] = generateCaptcha();
-}
-
-// Handle form submission
-if (isset($_POST['submit'])) {
-    $userCaptcha = isset($_POST['captcha']) ? strtoupper($_POST['captcha']) : '';
-    
-    if ($userCaptcha !== $_SESSION['captcha']) {
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Captcha',
-                text: 'Please enter the correct captcha code',
-                confirmButtonColor: '#d33'
-            });
-        </script>";
-    } else {
-        $email = $_POST['email'];
-        $password = md5($_POST['password']);
-
-        $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
-        $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, "ss", $email, $password);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $userDetails = mysqli_fetch_assoc($result);
-
-        if ($userDetails) {
-            $_SESSION['email'] = $email;
-            $_SESSION['role'] = $userDetails['role'];
-            $_SESSION['name'] = $userDetails['name'];
-            
-            echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Successful',
-                    text: 'Welcome back, " . $userDetails['name'] . "!',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(function() {
-                    window.location.href = '" . ($userDetails['role'] === 'admin' ? 'index_admin.php?page=dashboard' : 'dashboard.php') . "';
-                });
-            </script>";
-        } else {
-            echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: 'Invalid Email or Password',
-                    confirmButtonColor: '#d33'
-                });
-            </script>";
-        }
-    }
-    // Generate new captcha after each submission
-    $_SESSION['captcha'] = generateCaptcha();
-=======
-    }
-    return $captcha;
->>>>>>> 7d2f3fc78c0cbc6ed404b08213569da782620186
 }
 
 // If captcha is not set, generate it
@@ -283,32 +199,13 @@ if (isset($_POST['submit'])) {
     <header id="main-header" class="bg-danger py-2 text-white">
         <div class="container">
             <div class="row">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <div class="col-md-12 text-center">
-<<<<<<< HEAD
-                    <h1><i class="fa fa-user"></i> Harah Rubina Del Dios</h1>
-=======
-                    <h1><i class="fa fa-user"></i> Admin Login</h1>
-=======
-                <div class="col-md-12 text-center"> <!-- Center content -->
-                    <h1><i class="fa fa-user"></i> Harah Rubina Del Dios</h1>
->>>>>>> c51e4fd03bd979e2ba3b0907f4dcc76478822920
-=======
                 <div class="col-md-12 text-center">
                     <h1><i class="fa fa-user"></i> Admin Login</h1>
->>>>>>> 7d2f3fc78c0cbc6ed404b08213569da782620186
->>>>>>> d03ca79d1fb40e176ef75bbc8ccb34941423d2b6
                 </div>
             </div>
         </div>
     </header>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">
