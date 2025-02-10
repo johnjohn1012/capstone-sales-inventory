@@ -190,7 +190,9 @@ include 'includes/header.php';
           }
         ?>
       </div>
+      <?php include 'includes/footer.php'; ?>
     </div>
+
   </div>
 
   <script src="assets/libs/jquery/dist/jquery.min.js"></script>
@@ -201,5 +203,6 @@ include 'includes/header.php';
   <script src="assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="assets/js/dashboard.js"></script>
 
-  <?php include 'includes/footer.php'; ?>
+  
 </body>
+
