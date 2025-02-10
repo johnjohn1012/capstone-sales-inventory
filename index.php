@@ -123,12 +123,28 @@
 <?php 
 session_start();
 
+<<<<<<< HEAD
 // Generate captcha code
 function generateCaptcha($length = 6) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $captcha = '';
     for ($i = 0; $i < $length; $i++) {
         $captcha .= $characters[rand(0, strlen($characters) - 1)];
+=======
+    $sql = "SELECT * FROM users WHERE email = '$user' AND password = '$password'";
+    $run = mysqli_query($con, $sql);
+    $check = mysqli_num_rows($run);
+
+    if ($check == 1) {
+        session_start();
+        $_SESSION['email'] = $user;
+        echo "<script>window.open('index_admin.php?page=dashboard', '_self');</script>";
+
+        
+
+    } else {
+        echo "<script>alert('Invalid Email or Password'); window.open('index.php', '_self');</script>";
+>>>>>>> c51e4fd03bd979e2ba3b0907f4dcc76478822920
     }
     return $captcha;
 }
@@ -192,20 +208,35 @@ if (isset($_POST['submit'])) {
     // Generate new captcha after each submission
     $_SESSION['captcha'] = generateCaptcha();
 }
+
+
+
 ?>
 
 
     <!-- Header -->
-    <header id="main-header" class="bg-danger py-2 text-white">
+    <header id="main-header" class="bg-danger py-2 text-white" >
         <div class="container">
             <div class="row">
+<<<<<<< HEAD
                 <div class="col-md-12 text-center">
                     <h1><i class="fa fa-user"></i> Admin Login</h1>
+=======
+                <div class="col-md-12 text-center"> <!-- Center content -->
+                    <h1><i class="fa fa-user"></i> Harah Rubina Del Dios</h1>
+>>>>>>> c51e4fd03bd979e2ba3b0907f4dcc76478822920
                 </div>
             </div>
         </div>
     </header>
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">
