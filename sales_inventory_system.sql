@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 10, 2025 at 03:18 AM
+-- Host: localhost:3307
+-- Generation Time: Feb 10, 2025 at 10:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -40,10 +40,12 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `description`, `status`, `date_created`) VALUES
-(12, 'das', 'dsad', 'Active', '2025-02-10 00:56:49'),
-(13, 'das', 'dasd', 'Active', '2025-02-10 01:01:11'),
 (14, 'dsa', 'dasd', 'Active', '2025-02-10 01:01:15'),
-(15, 'dsadsa', '3241234231', 'Active', '2025-02-10 01:45:28');
+(15, 'dsadsa', '3241234231', 'Active', '2025-02-10 01:45:28'),
+(16, 'dasd', 'dasdas', 'Active', '2025-02-10 05:13:34'),
+(17, 'mocha', 'lami', 'Active', '2025-02-10 05:13:47'),
+(18, 'dsa', 'dsad', 'Active', '2025-02-10 05:15:34'),
+(19, 'dsa', 'dsad', 'Active', '2025-02-10 05:16:20');
 
 -- --------------------------------------------------------
 
@@ -63,7 +65,8 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `product_id`, `stock_quantity`, `last_updated`) VALUES
-(1, 4, 23, '2025-02-10 01:20:12');
+(1, 4, 23, '2025-02-10 01:20:12'),
+(4, 13, 321, '2025-02-10 06:26:20');
 
 -- --------------------------------------------------------
 
@@ -101,6 +104,7 @@ CREATE TABLE `order_items` (
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `status` enum('Active','Inactive') DEFAULT 'Active',
@@ -112,11 +116,10 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `status`, `date_created`, `category_id`) VALUES
-(2, 'Clemeña , John Rey', 'dssa', 2323.00, 'Active', '2025-02-10 01:11:13', 14),
-(3, 'fdasd', 'dasdas', 232.00, 'Active', '2025-02-10 01:17:54', 13),
-(4, 'fdasd', '323', 232.00, 'Active', '2025-02-10 01:20:12', 13),
-(5, 'dsad', '232', 434.00, 'Active', '2025-02-10 01:45:55', 15);
+INSERT INTO `products` (`id`, `name`, `image`, `description`, `price`, `status`, `date_created`, `category_id`) VALUES
+(21, 'Lordniel Actub', 'maxresdefault.jpg', 'Alumni Stories', 69420.00, 'Active', '2025-02-10 08:15:15', 19),
+(22, 'khendals', 'Screenshot 2025-02-07 145652.png', 'sasas', 10000.00, 'Active', '2025-02-10 08:18:33', 19),
+(24, 'Testing', '6a4e28f6034a7292e3dcbafa7a9f97ed.jpg', 'haha', 500.00, 'Active', '2025-02-10 09:16:13', 19);
 
 -- --------------------------------------------------------
 
@@ -127,42 +130,21 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `status`, `date_cr
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `role` enum('admin','cashier','user') NOT NULL DEFAULT 'user',
   `department` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(333) NOT NULL
+  `password` varchar(333) NOT NULL,
+  `profile_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `department`, `email`, `password`) VALUES
-(1, 'Clemeña , John Rey', 'Development', 'joqu.clemena.coc@phinmaed.com', 'e10adc3949ba59abbe56e057f20f883e'),
-(8, 'Roy', 'Marketing', 'roy@gmail.com', 'e10adc3949ba59abbe56e057f20f883e'),
-(9, 'Tan', 'Design', 'tan@gmail.com', 'e10adc3949ba59abbe56e057f20f883e');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `userss`
---
-
-CREATE TABLE `userss` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
-  `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `userss`
---
-
-INSERT INTO `userss` (`id`, `name`, `email`, `status`, `date_created`, `username`, `password`) VALUES
-(2, 'john', 'alexlynquinto84@gmail.com', 'Active', '2025-02-10 02:17:47', 'john1012', '$2y$10$qvkjsRS86k2H4Y3oykj2UuQMjm1IRlVEYTuYQHNTf0vzSv23xmyne');
+INSERT INTO `users` (`id`, `name`, `role`, `department`, `email`, `password`, `profile_image`) VALUES
+(1, 'Clemeña , John Rey', 'admin', 'Development', 'joqu.clemena.coc@phinmaed.com', 'e10adc3949ba59abbe56e057f20f883e', 'logos.png'),
+(8, 'Roy', 'user', 'Marketing', 'roy@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png'),
+(9, 'Tan', 'user', 'Design', 'tan@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png');
 
 --
 -- Indexes for dumped tables
@@ -208,14 +190,6 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `userss`
---
-ALTER TABLE `userss`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -223,13 +197,13 @@ ALTER TABLE `userss`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -247,19 +221,13 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `userss`
---
-ALTER TABLE `userss`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
