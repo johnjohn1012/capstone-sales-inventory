@@ -3,4 +3,7 @@
 	if (!$con) {
 		echo "Database Not Connected";
 	}
+	else {
+		echo"";
+	}
  ?>
