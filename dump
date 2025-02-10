@@ -208,7 +208,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </header>
-    <br><br><br>    <br><br><br>
+
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">
