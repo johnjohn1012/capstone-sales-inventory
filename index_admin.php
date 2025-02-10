@@ -44,7 +44,7 @@ include 'includes/header.php';
         <div class="brand-logo d-flex align-items-center justify-content-center" data-simpler style="background: linear-gradient(135deg,rgb(246, 249, 251),rgb(191, 214, 235)); color: white;">
 
           <a href="index_admin.php?page=dashboard" class="text-nowrap logo-img">
-            <img src="images/logo.png" width="120" height="100" style="display: block; margin: 0 auto;" alt="Logo" />
+            <img src="images/logos.png" width="120" height="100" style="display: block; margin: 0 auto;" alt="Logo" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
@@ -208,5 +208,13 @@ include 'includes/header.php';
   <script src="assets/js/dashboard.js"></script>
 
   
-</body>
+<body>
+
+<style>
+body{
+
+font-family: ;
+font-size: 17px;
+}
+</style>
 

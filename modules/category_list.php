@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
 }
 ?>
 
+<br><br><br>
 <form method="GET" class="mb-3">
     <input type="text" name="search" class="form-control" placeholder="Search categories..." value="<?= htmlspecialchars($search); ?>">
     <button type="submit" class="btn btn-secondary mt-2">Search</button>

@@ -152,4 +152,68 @@ if (isset($_POST['delete_product'])) {
     </div>
 </div>
 
+<!-- Edit Product Modal -->
+<?php $products->data_seek(0); // Reset the products result pointer ?>
+<?php while ($row = $products->fetch_assoc()) : ?>
+<div class="modal fade" id="editProductModal<?= $row['id']; ?>" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Inventory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" value="<?= $row['name']; ?>" required>
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" required><?= $row['description']; ?></textarea>
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" value="<?= $row['price']; ?>" required>
+                    <label>Category</label>
+                    <select name="category_id" class="form-control" required>
+                        <?php 
+                        $categories->data_seek(0); // Reset categories result pointer
+                        while ($cat = $categories->fetch_assoc()) : 
+                        ?>
+                            <option value="<?= $cat['id']; ?>" <?= ($cat['id'] == $row['category_id']) ? 'selected' : ''; ?>>
+                                <?= $cat['name']; ?>
+                            </option>
+                        <?php endwhile; ?>
+                    </select>
+                    <label>Stock Quantity</label>
+                    <input type="number" name="stock_quantity" class="form-control" value="<?= $row['stock_quantity']; ?>" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="update_product" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Product Modal -->
+<div class="modal fade" id="deleteProductModal<?= $row['id']; ?>" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Inventory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                    <p>Are you sure you want to delete <strong><?= $row['name']; ?></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete_product" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endwhile; ?>
+
 

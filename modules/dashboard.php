@@ -56,7 +56,7 @@
     }
 
     .card.pulse {
-        animation: pulse 2s infinite;
+        animation: pulse 10s infinite;
     }
 
     /* Welcome banner styling */

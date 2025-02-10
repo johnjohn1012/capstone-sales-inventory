@@ -14,7 +14,8 @@ function getCategories($con) {
 
 // Fetch Products Function with Category Name and Inventory
 function getProducts($con) {
-    $sql = "SELECT products.*, categories.name AS category_name, inventory.stock_quantity FROM products 
+    $sql = "SELECT products.*, categories.name AS category_name, inventory.stock_quantity 
+            FROM products 
             JOIN categories ON products.category_id = categories.id 
             LEFT JOIN inventory ON products.id = inventory.product_id
             ORDER BY products.date_created DESC";
@@ -25,6 +26,7 @@ function getProducts($con) {
     return $result;
 }
 
+
 // Add Product Function
 if (isset($_POST['add_product'])) {
     $name = $_POST['name'];
@@ -33,7 +35,9 @@ if (isset($_POST['add_product'])) {
     $category_id = $_POST['category_id'];
     $stock_quantity = $_POST['stock_quantity'];
     $status = 'Active';
-    $sql = "INSERT INTO products (name, description, price, category_id, status, date_created) VALUES ('$name', '$description', '$price', '$category_id', '$status', NOW())";
+    
+    $sql = "INSERT INTO products (name, description, price, category_id, status, date_created) 
+            VALUES ('$name', '$description', '$price', '$category_id', '$status', NOW())";
     if (!$con->query($sql)) {
         die("Query failed: " . $con->error);
     }
@@ -53,6 +57,7 @@ if (isset($_POST['update_product'])) {
     $price = $_POST['price'];
     $category_id = $_POST['category_id'];
     $stock_quantity = $_POST['stock_quantity'];
+    
     $sql = "UPDATE products SET name='$name', description='$description', price='$price', category_id='$category_id' WHERE id='$id'";
     if (!$con->query($sql)) {
         die("Query failed: " . $con->error);
@@ -79,9 +84,9 @@ if (isset($_POST['delete_product'])) {
 }
 ?>
 
+<!-- POS Frontend UI -->
 <div class="container mt-4">
     <h2>Point of Sale (POS) System</h2>
-
     <div class="categories">
         <?php $categories = getCategories($con); ?>
         <button class="category-btn active" onclick="filterCategory('All')">All</button>
@@ -89,16 +94,22 @@ if (isset($_POST['delete_product'])) {
             <button class="category-btn" onclick="filterCategory('<?= $cat['name']; ?>')"><?= $cat['name']; ?></button>
         <?php endwhile; ?>
     </div>
+
     
     <div class="menu" id="menuContainer">
-        <?php $products = getProducts($con); ?>
-        <?php while ($row = $products->fetch_assoc()) : ?>
-        <div class="menu-item" data-category="<?= $row['category_name']; ?>" onclick="addToOrder('<?= $row['name']; ?>', <?= $row['price']; ?>)">
-            <p><?= $row['name']; ?> - ₱<?= $row['price']; ?></p>
-            <p>Stock: <?= $row['stock_quantity']; ?></p>
-        </div>
-        <?php endwhile; ?>
+    <?php $products = getProducts($con); ?>
+    <?php while ($row = $products->fetch_assoc()) : ?>
+    <div class="menu-item" data-category="<?= $row['category_name']; ?>" onclick="addToOrder('<?= $row['name']; ?>', <?= $row['price']; ?>)">
+        <img src="uploads/<?= $row['image']; ?>" alt="<?= $row['name']; ?>" class="product-image">
+        <p><strong><?= $row['name']; ?></strong></p>
+        <p><?= $row['description']; ?></p>
+        <p>₱<?= $row['price']; ?></p>
+        <p>Stock: <?= $row['stock_quantity']; ?></p>
     </div>
+    <?php endwhile; ?>
+   </div>
+
+
     
     <div class="orders">
         <h3>Order Summary</h3>
@@ -150,7 +161,6 @@ function placeOrder() {
         alert('No items in the order!');
         return;
     }
-
     fetch('./function-php/place_order.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -162,27 +172,12 @@ function placeOrder() {
             alert('Order placed successfully!');
             orders = [];
             updateOrderList();
-            fetchOrders(); // Refresh the order list
         } else {
             alert('Error placing order: ' + data.error);
         }
     });
 }
-
-
-function filterCategory(category) {
-    const items = document.querySelectorAll('.menu-item');
-    items.forEach(item => {
-        if (category === 'All' || item.dataset.category === category) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
 </script>
-
-    
 
 
 <style>
@@ -192,6 +187,45 @@ function filterCategory(category) {
 .orders { margin-top: 20px; }
 
 /* General Styles */
+/* General Styles */
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+/* Menu Container */
+.menu-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu Items */
+.menu-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    width: 200px;
+}
+
+.menu-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 
 .container {
@@ -232,26 +266,7 @@ h2, h3 {
 }
 
 /* Menu Items */
-.menu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    justify-content: center;
-}
 
-.menu-item {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.menu-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
 /* Orders */
 .orders {
@@ -292,15 +307,17 @@ h2, h3 {
 }
 
 /* Responsive Design */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .menu {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    .menu-container {
+        flex-direction: column;
+        align-items: center;
     }
-    .container {
-        padding: 15px;
-    }
-    .orders table th, .orders table td {
-        padding: 5px;
+
+    .menu-item {
+        width: 100%;
+        max-width: 250px;
     }
 }
+
 </style>

@@ -68,6 +68,8 @@ if (isset($_POST['delete_product'])) {
     $con->query($sql);
 }
 ?>
+<br>
+<br>
 
 <div class="container mt-4">
     <h2>Product List</h2>
