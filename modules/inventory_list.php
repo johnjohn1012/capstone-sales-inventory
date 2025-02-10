@@ -80,7 +80,7 @@ if (isset($_POST['delete_product'])) {
 ?>
 
 <div class="container mt-4">
-    <h2>Product Inventory List</h2>
+    <h2> Inventory List</h2>
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add Product</button>
     <table class="table table-bordered">
         <thead>
@@ -124,7 +124,7 @@ if (isset($_POST['delete_product'])) {
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Product</h5>
+                    <h5 class="modal-title">Add New Inventory</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -152,4 +152,4 @@ if (isset($_POST['delete_product'])) {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+

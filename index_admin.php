@@ -39,7 +39,10 @@ include 'includes/header.php';
     <!-- Sidebar Start -->
     <aside class="left-sidebar">
       <div>
-        <div class="brand-logo d-flex align-items-center justify-content-center">
+
+
+        <div class="brand-logo d-flex align-items-center justify-content-center" data-simpler style="background: linear-gradient(135deg,rgb(246, 249, 251),rgb(191, 214, 235)); color: white;">
+
           <a href="index_admin.php?page=dashboard" class="text-nowrap logo-img">
             <img src="images/logo.png" width="120" height="100" style="display: block; margin: 0 auto;" alt="Logo" />
           </a>
@@ -48,10 +51,11 @@ include 'includes/header.php';
           </div>
         </div>
 
+
+
         <!-- Sidebar navigation-->
+<nav class="sidebar-nav scroll-sidebar" data-simplebar style="background: linear-gradient(135deg,rgb(235, 241, 247),rgb(206, 228, 249)); color: white;">
 
-
-<nav class="sidebar-nav scroll-sidebar" data-simplebar>
   <ul id="sidebarnav">
     <li class="nav-small-cap">
       <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

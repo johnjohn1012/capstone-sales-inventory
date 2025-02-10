@@ -81,24 +81,37 @@ if (isset($_POST['submit'])) {
         session_start();
         $_SESSION['email'] = $user;
         echo "<script>window.open('index_admin.php?page=dashboard', '_self');</script>";
+
+        
+
     } else {
         echo "<script>alert('Invalid Email or Password'); window.open('index.php', '_self');</script>";
     }
 }
+
+
+
 ?>
 
 
     <!-- Header -->
-    <header id="main-header" class="bg-danger py-2 text-white">
+    <header id="main-header" class="bg-danger py-2 text-white" >
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center"> <!-- Center content -->
-                    <h1><i class="fa fa-user"></i> Admin Login</h1>
+                    <h1><i class="fa fa-user"></i> Harah Rubina Del Dios</h1>
                 </div>
             </div>
         </div>
     </header>
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">

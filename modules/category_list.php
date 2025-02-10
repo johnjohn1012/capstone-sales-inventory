@@ -2,42 +2,72 @@
 // Database Connection
 include "includes/connection.php";
 
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
 // Fetch Categories Function
-function getCategories($con) {
-    $sql = "SELECT * FROM categories ORDER BY date_created DESC";
-    $result = $con->query($sql);
-    return $result;
+function getCategories($con, $search = '') {
+    $sql = "SELECT * FROM categories";
+    if ($search) {
+        $sql .= " WHERE name LIKE ? OR description LIKE ?";
+    }
+    $sql .= " ORDER BY date_created DESC";
+    
+    $stmt = $con->prepare($sql);
+    if ($search) {
+        $search_param = "%$search%";
+        $stmt->bind_param("ss", $search_param, $search_param);
+    }
+    $stmt->execute();
+    return $stmt->get_result();
 }
 
 // Add Category Function
-if (isset($_POST['add_category'])) {
-    $name = $_POST['name'];
-    $description = $_POST['description'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
+    $name = trim($_POST['name']);
+    $description = trim($_POST['description']);
     $status = 'Active';
-    $sql = "INSERT INTO categories (name, description, status, date_created) VALUES ('$name', '$description', '$status', NOW())";
-    $con->query($sql);
-   
+    $sql = "INSERT INTO categories (name, description, status, date_created) VALUES (?, ?, ?, NOW())";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("sss", $name, $description, $status);
+    $stmt->execute();
 }
 
-
 // Update Category Function
-if (isset($_POST['update_category'])) {
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $sql = "UPDATE categories SET name='$name', description='$description' WHERE id='$id'";
-    $con->query($sql);
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_category'])) {
+    $id = intval($_POST['id']);
+    $name = trim($_POST['name']);
+    $description = trim($_POST['description']);
+    $sql = "UPDATE categories SET name = ?, description = ? WHERE id = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("ssi", $name, $description, $id);
+    $stmt->execute();
 }
 
 // Delete Category Function
-if (isset($_POST['delete_category'])) {
-    $id = $_POST['id'];
-    $sql = "DELETE FROM categories WHERE id='$id'";
-    $con->query($sql);
-    
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_category'])) {
+    $id = intval($_POST['id']);
+    $sql = "DELETE FROM categories WHERE id = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+}
+
+// Toggle Status Function
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
+    $id = intval($_POST['id']);
+    $current_status = $_POST['current_status'];
+    $new_status = ($current_status === 'Active') ? 'Inactive' : 'Active';
+    $sql = "UPDATE categories SET status = ? WHERE id = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("si", $new_status, $id);
+    $stmt->execute();
 }
 ?>
+
+<form method="GET" class="mb-3">
+    <input type="text" name="search" class="form-control" placeholder="Search categories..." value="<?= htmlspecialchars($search); ?>">
+    <button type="submit" class="btn btn-secondary mt-2">Search</button>
+</form>
 
 
 
@@ -63,7 +93,15 @@ if (isset($_POST['delete_category'])) {
                 <td><?= $row['date_created']; ?></td>
                 <td><?= $row['name']; ?></td>
                 <td><?= $row['description']; ?></td>
-                <td><span class="badge bg-success">Active</span></td>
+                <td>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                        <input type="hidden" name="current_status" value="<?= $row['status']; ?>">
+                        <button type="submit" name="toggle_status" class="btn btn-sm <?= $row['status'] == 'Active' ? 'btn-success' : 'btn-secondary'; ?>">
+                            <?= $row['status']; ?>
+                        </button>
+                    </form>
+                </td>
                 <td>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['id']; ?>">Edit</button>
                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['id']; ?>">Delete</button>
@@ -140,5 +178,3 @@ if (isset($_POST['delete_category'])) {
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
