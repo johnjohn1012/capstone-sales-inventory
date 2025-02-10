@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
     <style>
         /* Custom CSS for Glowing Effects */
         body {
-            background: url("https://th.bing.com/th/id/R.e9ea962e02082e7e2c7f3815a71a8364?rik=j34ZRvwSEhWP6A&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f07%2fFree-4k-Backgrounds-Screen-Download.jpg&ehk=z%2f7Q4nlcVzNOT4%2f8vtJUjBFs3p%2fzurkacBEpNuTsIqM%3d&risl=&pid=ImgRaw&r=0") no-repeat center center fixed;
+            background: url("images/image.png") no-repeat center center fixed;
         background-size: cover;
 
             font-family: Arial, sans-serif;
@@ -216,7 +216,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </header>
-
+        <br><br><br>    <br><br><br>
     <!-- Login Section -->
     <section id="post" class="py-4">
         <div class="container">
