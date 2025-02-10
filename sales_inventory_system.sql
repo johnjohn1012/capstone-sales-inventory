@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3307
--- Generation Time: Feb 10, 2025 at 10:32 AM
+-- Host: 127.0.0.1
+-- Generation Time: Feb 10, 2025 at 03:35 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -131,7 +131,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `role` enum('admin','cashier','user') NOT NULL DEFAULT 'user',
-  `department` varchar(255) NOT NULL,
+  `gender` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(333) NOT NULL,
   `profile_image` varchar(255) DEFAULT NULL
@@ -141,10 +141,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `role`, `department`, `email`, `password`, `profile_image`) VALUES
-(1, 'Clemeña , John Rey', 'admin', 'Development', 'joqu.clemena.coc@phinmaed.com', 'e10adc3949ba59abbe56e057f20f883e', 'logos.png'),
-(8, 'Roy', 'user', 'Marketing', 'roy@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png'),
-(9, 'Tan', 'user', 'Design', 'tan@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png');
+INSERT INTO `users` (`id`, `name`, `role`, `gender`, `email`, `password`, `profile_image`) VALUES
+(1, 'Clemeña , John Rey', 'admin', 'male', 'joqu.clemena.coc@phinmaed.com', 'e10adc3949ba59abbe56e057f20f883e', 'logos.png'),
+(8, 'Roy', 'user', 'male', 'roy@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png'),
+(9, 'Tan', 'user', 'male', 'tan@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'logo.png');
 
 --
 -- Indexes for dumped tables
@@ -228,23 +228,6 @@ ALTER TABLE `products`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `inventory`
---
-ALTER TABLE `inventory`
-  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `order_items`
---
-ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

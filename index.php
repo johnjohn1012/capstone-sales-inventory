@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <link rel="shortcut icon" type="image/png" href="images/logo.png" />
-    <title>Admin Login</title>
+    <title>Harah Rubina Del Dios </title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
     <!-- Add SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -203,7 +203,7 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h1><i class="fa fa-user"></i> Admin Login</h1>
+                    <h1><i class="fa fa-user"></i>Harah Rubina Del Dios</h1>
                 </div>
             </div>
         </div>
@@ -219,8 +219,8 @@ if (isset($_POST['submit'])) {
                             <div class="logo-circle">
                                 <img src="images/logo.png" alt="Logo">
                             </div>
-                            <h2 class="card-title text-center">Login</h2>
                             <h5 class="card-text text-center">Please Login Here</h5>
+                          
                         </div>
                         <div class="card-body">
                             <form method="POST" action="">

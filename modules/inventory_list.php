@@ -2,6 +2,31 @@
 // Database Connection
 include "includes/connection.php";
 
+// Handle Pagination
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? intval($_GET['limit']) : 10;
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
+$offset = max(0, ($page - 1) * $limit);
+
+// Search Input Handling
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+// Count total categories
+$count_query = "SELECT COUNT(*) as total FROM categories";
+if (!empty($search)) {
+    $count_query .= " WHERE name LIKE ? OR description LIKE ?";
+}
+$stmt = $con->prepare($count_query);
+
+if (!empty($search)) {
+    $search_param = "%$search%";
+    $stmt->bind_param("ss", $search_param, $search_param);
+}
+
+$stmt->execute();
+$count_result = $stmt->get_result();
+$total_categories = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_categories / $limit);
+
 // Fetch Categories Function
 function getCategories($con) {
     $sql = "SELECT * FROM categories ORDER BY date_created DESC";
@@ -78,10 +103,45 @@ if (isset($_POST['delete_product'])) {
     }
 }
 ?>
+<br>
+<h1>Inventory List</h1>
 
 <div class="container mt-4">
-    <h2> Inventory List</h2>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add Product</button>
+
+  
+
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+
+        <!-- Show Entries Dropdown -->
+        <label style="display: flex; align-items: center; gap: 5px;">
+        Show entries
+        <select id="entriesSelect" class="form-control form-control-sm">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+        </label>
+
+
+        <!-- Search Input -->
+        <form method="GET" action="">
+        <div style="display: flex; gap: 5px; align-items: center;">
+            <input type="text" name="search" value="<?= $search; ?>" class="form-control" 
+                placeholder="Search here" style="flex: 1; max-width: 250px;">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        </form>
+
+
+        <!-- Create New Button -->
+        <button class="btn btn-primary" style="padding: 10px; width: 200px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
+        + Create New
+        </button>
+
+        </div>
+
+  
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -109,13 +169,37 @@ if (isset($_POST['delete_product'])) {
                 <td><?= $row['stock_quantity']; ?></td>
                 <td><span class="badge bg-success">Active</span></td>
                 <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal<?= $row['id']; ?>">Edit</button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal<?= $row['id']; ?>">Delete</button>
+                <div style="display: flex; gap: 5px; align-items: center;">
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" 
+                            data-bs-target="#editProductModal<?= $row['id']; ?>">Edit</button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" 
+                            data-bs-target="#deleteProductModal<?= $row['id']; ?>">Delete</button>
+                </div>
+
                 </td>
             </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
+
+                        <!-- Pagination -->
+                <div style="display: flex; justify-content: flex-end;">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $page - 1; ?>&limit=<?= $limit; ?>">Previous</a>
+                            </li>
+                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                                <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $i; ?>&limit=<?= $limit; ?>"> <?= $i; ?> </a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $page + 1; ?>&limit=<?= $limit; ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 </div>
 
 <!-- Add Product Modal -->
