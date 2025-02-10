@@ -83,10 +83,11 @@ if (isset($_POST['delete_product'])) {
     }
 }
 ?>
-
+<br>
+  <h1>Point of Sale</h1>
 <!-- POS Frontend UI -->
 <div class="container mt-4">
-    <h2>Point of Sale (POS) System</h2>
+  
     <div class="categories">
         <?php $categories = getCategories($con); ?>
         <button class="category-btn active" onclick="filterCategory('All')">All</button>

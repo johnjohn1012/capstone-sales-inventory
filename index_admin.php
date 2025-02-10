@@ -161,35 +161,7 @@ include 'includes/header.php';
     </a>
     </li>
 
-      <script>
-          function updateDateTime() {
-              let now = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
-              let time = new Date(now);
-
-              // Format time
-              let hours = time.getHours();
-              let minutes = time.getMinutes();
-              let seconds = time.getSeconds();
-              let ampm = hours >= 12 ? "PM" : "AM";
-
-              hours = hours % 12 || 12; // Convert to 12-hour format
-              minutes = minutes.toString().padStart(2, "0");
-              seconds = seconds.toString().padStart(2, "0");
-
-              let formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
-
-              // Format date
-              let options = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
-              let formattedDate = time.toLocaleDateString("en-US", options);
-
-              // Update HTML
-              document.getElementById("clock").innerText = formattedTime;
-              document.getElementById("date").innerText = formattedDate;
-          }
-
-          setInterval(updateDateTime, 1000);
-          updateDateTime(); // Initial call to prevent delay
-      </script>
+    
 
 
 
@@ -253,7 +225,35 @@ include 'includes/header.php';
   <script src="assets/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="assets/js/dashboard.js"></script>
+  <script>
+          function updateDateTime() {
+              let now = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
+              let time = new Date(now);
 
+              // Format time
+              let hours = time.getHours();
+              let minutes = time.getMinutes();
+              let seconds = time.getSeconds();
+              let ampm = hours >= 12 ? "PM" : "AM";
+
+              hours = hours % 12 || 12; // Convert to 12-hour format
+              minutes = minutes.toString().padStart(2, "0");
+              seconds = seconds.toString().padStart(2, "0");
+
+              let formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+              // Format date
+              let options = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
+              let formattedDate = time.toLocaleDateString("en-US", options);
+
+              // Update HTML
+              document.getElementById("clock").innerText = formattedTime;
+              document.getElementById("date").innerText = formattedDate;
+          }
+
+          setInterval(updateDateTime, 1000);
+          updateDateTime(); // Initial call to prevent delay
+      </script>
   
 <body>
 
