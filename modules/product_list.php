@@ -163,3 +163,38 @@ if (isset($_POST['delete_product'])) {
         </tbody>
     </table>
 </div>
+
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                    <label>Image</label>
+                    <input type="file" name="image" class="form-control">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" required></textarea>
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" required>
+                    <label>Category</label>
+                    <select name="category_id" class="form-control" required>
+                        <?php $categories = getCategories($con); ?>
+                        <?php while ($cat = $categories->fetch_assoc()) : ?>
+                            <option value="<?= $cat['id']; ?>"><?= $cat['name']; ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="add_product" class="btn btn-primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
