@@ -14,15 +14,21 @@ function getCategories($con) {
 
 // Fetch Products Function with Category Name and Inventory
 function getProducts($con) {
-    $sql = "SELECT products.*, categories.name AS category_name, inventory.stock_quantity 
-            FROM products 
-            JOIN categories ON products.category_id = categories.id 
-            LEFT JOIN inventory ON products.id = inventory.product_id
-            ORDER BY products.date_created DESC";
+    $sql = "SELECT p.*, c.name AS category_name, 
+                   IFNULL(i.stock_quantity, 0) AS stock_quantity, 
+                   IFNULL(i.stock_in, 0) AS stock_in, 
+                   IFNULL(i.stock_out, 0) AS stock_out
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            LEFT JOIN inventory i ON p.id = i.product_id
+            ORDER BY p.date_created DESC";
+
     $result = $con->query($sql);
+
     if (!$result) {
         die("Query failed: " . $con->error);
     }
+
     return $result;
 }
 
@@ -84,8 +90,7 @@ if (isset($_POST['delete_product'])) {
 }
 ?>
 <br>
-  <h1>Point of Sale</h1>
-<!-- POS Frontend UI -->
+<h1>Point Of Sales</h1>
 <div class="container mt-4">
   
     <div class="categories">
@@ -135,13 +140,25 @@ if (isset($_POST['delete_product'])) {
 let orders = [];
 let grandTotal = 0;
 
-function addToOrder(itemName, itemPrice) {
+function addToOrder(itemName, itemPrice, stockAvailable) {
     const orderIndex = orders.findIndex(order => order.name === itemName);
-    if (orderIndex > -1) {
-        orders[orderIndex].quantity++;
-    } else {
-        orders.push({ name: itemName, price: itemPrice, quantity: 1 });
+
+    if (stockAvailable <= 0) {
+        alert("This item is out of stock!");
+        return;
     }
+
+    if (orderIndex > -1) {
+        if (orders[orderIndex].quantity < stockAvailable) {
+            orders[orderIndex].quantity++;
+        } else {
+            alert(`Not enough stock available! Only ${stockAvailable} left.`);
+            return;
+        }
+    } else {
+        orders.push({ name: itemName, price: itemPrice, quantity: 1, stock: stockAvailable });
+    }
+
     updateOrderList();
 }
 
@@ -149,12 +166,19 @@ function updateOrderList() {
     const orderList = document.getElementById('orderList');
     orderList.innerHTML = '';
     grandTotal = 0;
+
     orders.forEach(order => {
         grandTotal += order.price * order.quantity;
-        const row = `<tr><td>${order.quantity}</td><td>${order.name}</td><td>${(order.price * order.quantity).toFixed(2)}</td></tr>`;
+        const row = `
+            <tr>
+                <td>${order.quantity}</td>
+                <td>${order.name}</td>
+                <td>₱${(order.price * order.quantity).toFixed(2)}</td>
+            </tr>`;
         orderList.innerHTML += row;
     });
-    document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+
+    document.getElementById('grandTotal').textContent = `₱${grandTotal.toFixed(2)}`;
 }
 
 function placeOrder() {
@@ -162,6 +186,7 @@ function placeOrder() {
         alert('No items in the order!');
         return;
     }
+
     fetch('./function-php/place_order.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -173,9 +198,14 @@ function placeOrder() {
             alert('Order placed successfully!');
             orders = [];
             updateOrderList();
+            location.reload();  // Refresh to update stock
         } else {
             alert('Error placing order: ' + data.error);
         }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again.");
     });
 }
 </script>

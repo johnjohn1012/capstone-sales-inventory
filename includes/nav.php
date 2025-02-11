@@ -48,7 +48,7 @@
 <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header" style="background: linear-gradient(135deg, #6a11cb, #2575fc); color: white;">
+            <div class="modal-header"  style="background: linear-gradient(135deg, rgba(230, 151, 34, 0.74), rgb(174, 156, 203)); color: white;">
                 <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

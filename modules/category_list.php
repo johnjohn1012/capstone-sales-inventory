@@ -2,46 +2,54 @@
 // Database Connection
 include "includes/connection.php";
 
-// Handle Pagination
+// Handle Pagination Parameters
 $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? intval($_GET['limit']) : 10;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
-$offset = max(0, ($page - 1) * $limit);
+$page = max(1, $page); // Ensure page number is at least 1
+$offset = ($page - 1) * $limit;
 
 // Search Input Handling
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 // Count total categories
 $count_query = "SELECT COUNT(*) as total FROM categories";
+$params = [];
+$types = "";
+
 if (!empty($search)) {
     $count_query .= " WHERE name LIKE ? OR description LIKE ?";
-}
-$stmt = $con->prepare($count_query);
-
-if (!empty($search)) {
     $search_param = "%$search%";
-    $stmt->bind_param("ss", $search_param, $search_param);
+    $params = [&$search_param, &$search_param];
+    $types = "ss";
 }
 
+$stmt = $con->prepare($count_query);
+if (!empty($search)) {
+    $stmt->bind_param($types, ...$params);
+}
 $stmt->execute();
 $count_result = $stmt->get_result();
 $total_categories = $count_result->fetch_assoc()['total'];
-$total_pages = ceil($total_categories / $limit);
+$total_pages = max(1, ceil($total_categories / $limit)); // Ensure at least 1 page
 
 // Fetch categories with search and pagination
 $sql = "SELECT * FROM categories";
+$params = [];
+$types = "";
+
 if (!empty($search)) {
     $sql .= " WHERE name LIKE ? OR description LIKE ?";
+    $params = [&$search_param, &$search_param];
+    $types = "ss";
 }
+
 $sql .= " ORDER BY date_created DESC LIMIT ?, ?";
+$params[] = &$offset;
+$params[] = &$limit;
+$types .= "ii";
 
 $stmt = $con->prepare($sql);
-
-if (!empty($search)) {
-    $stmt->bind_param("ssii", $search_param, $search_param, $offset, $limit);
-} else {
-    $stmt->bind_param("ii", $offset, $limit);
-}
-
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $categories = $stmt->get_result();
 
@@ -65,13 +73,15 @@ function getCategories($con, $search = '') {
 // Handle Category Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_category'])) {
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-        $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+        $name = trim($_POST['name'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+
         if (!empty($name) && !empty($description)) {
             $status = 'Active';
             $sql = "INSERT INTO categories (name, description, status, date_created) VALUES (?, ?, ?, NOW())";
             $stmt = $con->prepare($sql);
             $stmt->bind_param("sss", $name, $description, $status);
+
             if ($stmt->execute()) {
                 echo "Category added successfully!";
             } else {
@@ -85,12 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['update_category'])) {
         $id = intval($_POST['id']);
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-        $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+        $name = trim($_POST['name'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+
         if (!empty($name) && !empty($description)) {
             $sql = "UPDATE categories SET name = ?, description = ? WHERE id = ?";
             $stmt = $con->prepare($sql);
             $stmt->bind_param("ssi", $name, $description, $id);
+
             if ($stmt->execute()) {
                 echo "Category updated successfully!";
             } else {
@@ -107,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "DELETE FROM categories WHERE id = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("i", $id);
+
         if ($stmt->execute()) {
             echo "Category deleted successfully!";
         } else {
@@ -119,9 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = intval($_POST['id']);
         $current_status = $_POST['current_status'];
         $new_status = ($current_status === 'Active') ? 'Inactive' : 'Active';
+
         $sql = "UPDATE categories SET status = ? WHERE id = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("si", $new_status, $id);
+
         if ($stmt->execute()) {
             echo "Status updated successfully!";
         } else {
@@ -140,35 +155,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-4">
 
 
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
 
-                      <!-- Show Entries Dropdown -->
-                         <label style="display: flex; align-items: center; gap: 5px;">
-                        Show entries
-                        <select id="entriesSelect" class="form-control form-control-sm">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
-                    </label>
+                <!-- Show Entries Dropdown -->
+                <label style="display: flex; align-items: center; gap: 5px;">
+                    Show entries
+                    <select id="entriesSelect" class="form-control form-control-sm" name="limit">
+                        <option value="10" <?= ($limit == 10) ? 'selected' : ''; ?>>10</option>
+                        <option value="25" <?= ($limit == 25) ? 'selected' : ''; ?>>25</option>
+                        <option value="50" <?= ($limit == 50) ? 'selected' : ''; ?>>50</option>
+                    </select>
+                </label>
 
-                    
-                    <!-- Search Input -->
-                    <form method="GET" action="">
-                        <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="text" name="search" value="<?= $search; ?>" class="form-control" 
-                                placeholder="Search here" style="flex: 1; max-width: 250px;">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                    </form>
+                <!-- Search Input -->
+                <form method="GET" action="" id="searchForm">
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <input type="hidden" name="limit" id="hiddenLimit" value="<?= $limit; ?>">
+                        <input type="text" name="search" value="<?= htmlspecialchars($search); ?>" class="form-control" 
+                            placeholder="Search here" style="flex: 1; max-width: 250px;">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
 
+                <!-- Create New Button -->
+                <button class="btn btn-primary" style="padding: 10px; width: 200px;" data-bs-toggle="modal" data-bs-target="#addModal">
+                    + Create New
+                </button>
 
-                    <!-- Create New Button -->
-                    <button class="btn btn-primary" style="padding: 10px; width: 200px;" data-bs-toggle="modal" data-bs-target="#addModal">
-                        + Create New
-                    </button>
-
-                </div>
+            </div>
 
         
 
@@ -205,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td>
                 <td>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['id']; ?>">Edit</button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['id']; ?>">Delete</button>
+                   <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['id']; ?>">Delete</button> 
                 </td>
             </tr>
 
@@ -247,17 +261,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <h5 class="modal-title">Delete Category</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
+
                             <div class="modal-body">
                                 <input type="hidden" name="id" value="<?= $row['id']; ?>">
                                 <p>Are you sure you want to delete this category?</p>
                             </div>
+
                             <div class="modal-footer">
                                 <button type="submit" name="delete_category" class="btn btn-danger">Delete</button>
                             </div>
+
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> 
             <?php endwhile; ?>
         </tbody>
     
@@ -266,23 +283,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Pagination -->
 
-                    <div style="display: flex; justify-content: flex-end;">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page - 1; ?>&limit=<?= $limit; ?>">Previous</a>
+                <div style="display: flex; justify-content: flex-end;">
+                <nav>
+                    <ul class="pagination">
+                        <!-- Previous Page -->
+                        <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= max(1, $page - 1); ?>&limit=<?= $limit; ?>&search=<?= urlencode($search); ?>">Previous</a>
+                        </li>
+                        
+                        <!-- Page Numbers -->
+                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                            <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i; ?>&limit=<?= $limit; ?>&search=<?= urlencode($search); ?>"> <?= $i; ?> </a>
                             </li>
-                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                                <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $i; ?>&limit=<?= $limit; ?>"> <?= $i; ?> </a>
-                                </li>
-                            <?php endfor; ?>
-                            <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page + 1; ?>&limit=<?= $limit; ?>">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                        <?php endfor; ?>
+                        
+                        <!-- Next Page -->
+                        <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= min($total_pages, $page + 1); ?>&limit=<?= $limit; ?>&search=<?= urlencode($search); ?>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
 
 
@@ -313,3 +335,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
+
+
+<script>
+    // Automatically update the form when "Show Entries" dropdown changes
+    document.getElementById('entriesSelect').addEventListener('change', function() {
+        let searchForm = document.getElementById('searchForm');
+        document.getElementById('hiddenLimit').value = this.value;
+        searchForm.submit(); // Auto-submit form
+    });
+</script>

@@ -32,6 +32,8 @@ if ($result && mysqli_num_rows($result) > 0) {
 include 'includes/header.php';
 ?>
 
+
+
 <body>
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -41,7 +43,7 @@ include 'includes/header.php';
       <div>
 
 
-        <div class="brand-logo d-flex align-items-center justify-content-center" data-simpler style="background: linear-gradient(135deg,rgb(246, 249, 251),rgb(191, 214, 235)); color: white;">
+        <div class="brand-logo d-flex align-items-center justify-content-center" data-simpler  style="background: linear-gradient(135deg, rgba(230, 151, 34, 0.74), rgb(174, 156, 203)); color: white; border: none;">
 
           <a href="index_admin.php?page=dashboard" class="text-nowrap logo-img">
             <img src="images/logos.png" width="120" height="100" style="display: block; margin: 0 auto;" alt="Logo" />

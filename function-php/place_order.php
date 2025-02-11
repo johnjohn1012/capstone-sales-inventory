@@ -1,50 +1,89 @@
 <?php
-include "includes/connection.php";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    include "../includes/connection.php";
+    $data = json_decode(file_get_contents("php://input"), true);
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-if (isset($data['orders']) && count($data['orders']) > 0) {
-    $total_amount = 0;
-
-    // Insert Order
-    $sql = "INSERT INTO orders (total_amount, order_date) VALUES (0, NOW())";
-    if (!$con->query($sql)) {
-        echo json_encode(["success" => false, "error" => $con->error]);
+    if (!isset($data['orders']) || empty($data['orders'])) {
+        echo json_encode(["success" => false, "error" => "No orders received"]);
         exit;
     }
 
-    $order_id = $con->insert_id;
+    $totalPrice = 0;
+    $orderedItems = [];
 
+    // Calculate total price and prepare items
     foreach ($data['orders'] as $order) {
-        $product_name = $order['name'];
-        $quantity = $order['quantity'];
-        $price = $order['price'];
-        $total = $price * $quantity;
+        $totalPrice += $order['price'] * $order['quantity'];
+    }
 
-        $total_amount += $total;
+    // Insert into orders table
+    $insertOrder = $con->query("INSERT INTO orders (total_price, date_created) VALUES ('$totalPrice', NOW())");
 
-        // Fetch product ID
-        $product_res = $con->query("SELECT id FROM products WHERE name = '$product_name'");
-        $product = $product_res->fetch_assoc();
-        $product_id = $product['id'];
+    if (!$insertOrder) {
+        echo json_encode(["success" => false, "error" => "Failed to create order"]);
+        exit;
+    }
 
-        // Insert order item
-        $sql_item = "INSERT INTO order_items (order_id, product_id, quantity, price, total) 
-                     VALUES ('$order_id', '$product_id', '$quantity', '$price', '$total')";
-        if (!$con->query($sql_item)) {
-            echo json_encode(["success" => false, "error" => $con->error]);
+    $orderId = $con->insert_id; // Get the newly inserted order ID
+
+    // Process each order item
+    foreach ($data['orders'] as $order) {
+        $productName = $con->real_escape_string($order['name']);
+        $quantity = (int) $order['quantity'];
+
+        // Get Product ID & Current Stock
+        $productQuery = $con->query("SELECT p.id, p.name, p.price, p.description, COALESCE(i.stock_quantity, 0) AS stock_quantity 
+                                     FROM products p 
+                                     LEFT JOIN inventory i ON p.id = i.product_id 
+                                     WHERE p.name = '$productName'");
+
+        if ($productQuery->num_rows === 0) {
+            echo json_encode(["success" => false, "error" => "Product not found: $productName"]);
             exit;
         }
 
-        // Update inventory stock
-        $con->query("UPDATE inventory SET stock_quantity = stock_quantity - $quantity WHERE product_id = '$product_id'");
+        $product = $productQuery->fetch_assoc();
+        $productId = $product['id'];
+        $currentStock = (int) $product['stock_quantity']; 
+
+        if ($currentStock < $quantity) {
+            echo json_encode(["success" => false, "error" => "Not enough stock for $productName (Available: $currentStock, Needed: $quantity)"]);
+            exit;
+        }
+
+        // Update Inventory
+        $newStock = $currentStock - $quantity;
+        $updateStock = $con->query("UPDATE inventory SET stock_quantity = '$newStock', stock_out = stock_out + '$quantity' WHERE product_id = '$productId'");
+
+        if (!$updateStock) {
+            echo json_encode(["success" => false, "error" => "Failed to update stock"]);
+            exit;
+        }
+
+        // Insert into order_items table
+        $insertOrderItem = $con->query("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('$orderId', '$productId', '$quantity', '{$order['price']}')");
+
+        if (!$insertOrderItem) {
+            echo json_encode(["success" => false, "error" => "Failed to insert order items"]);
+            exit;
+        }
+
+        // Store order details to send back
+        $orderedItems[] = [
+            "name" => $product['name'],
+            "description" => $product['description'],
+            "price" => $product['price'],
+            "quantity" => $quantity,
+            "total" => $product['price'] * $quantity
+        ];
     }
 
-    // Update total amount in orders table
-    $con->query("UPDATE orders SET total_amount = '$total_amount' WHERE id = '$order_id'");
-
-    echo json_encode(["success" => true]);
-} else {
-    echo json_encode(["success" => false, "error" => "Invalid order data"]);
+    // Send order details back to POS
+    echo json_encode([
+        "success" => true,
+        "order_id" => $orderId,
+        "total_price" => $totalPrice,
+        "items" => $orderedItems
+    ]);
 }
 ?>
